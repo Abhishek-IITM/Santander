@@ -1,0 +1,19 @@
+---
+# tasks file for santander_lib
+- name: Push prediction code
+  become: yes
+  become_method: sudo
+  synchronize:
+    src: '../../prediction_lib/'
+    dest: '~/santander-transaction/'
+  tags:
+    - santander_lib
+
+- name: Push kaggle credentials
+  become: yes
+  become_method: sudo
+  synchronize:
+    src: '~/.kaggle/'
+    dest: '~'
+  tags:
+    - santander_lib

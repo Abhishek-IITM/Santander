@@ -1,0 +1,8 @@
+---
+# tasks file for create_directory
+- name: create temp directory
+  shell:
+    cmd: 'mkdir ~/test_1234'
+  register: mkdir_out
+
+- debug: msg = '{{mkdir_out.stdout}}'

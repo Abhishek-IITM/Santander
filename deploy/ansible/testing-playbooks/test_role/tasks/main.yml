@@ -1,0 +1,10 @@
+---
+# tasks file for test_role
+- name: get git status
+  shell:
+    cmd: "git status"
+  register: git_status
+
+- debug: msg="{{ git_status.stdout }}"
+
+- debug: msg="{{ git_status.stderr }}"

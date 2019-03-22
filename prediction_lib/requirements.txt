@@ -1,0 +1,10 @@
+kaggle
+pandas
+numpy
+datetime
+scikit-learn
+matplotlib
+seaborn
+jupyter
+jupyterthemes
+ansible

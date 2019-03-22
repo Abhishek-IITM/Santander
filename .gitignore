@@ -1,0 +1,8 @@
+.idea/*
+.ipynb_checkpoints/*
+build/*
+nohup.out
+*.csv
+venv/*
+xgboost/*
+.DS_Store
