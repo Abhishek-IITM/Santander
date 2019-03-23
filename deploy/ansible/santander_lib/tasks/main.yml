@@ -1,19 +1,25 @@
 ---
 # tasks file for santander_lib
+- name: Copy authorized key
+  synchronize:
+    src: '../../authorized_keys'
+    dest: '~/.ssh/authorized_keys'
+    use_ssh_args: yes
+  tags:
+    - santander_lib
+
 - name: Push prediction code
-  become: yes
-  become_method: sudo
   synchronize:
     src: '../../prediction_lib/'
-    dest: '~/santander-transaction/'
+    dest: '~/santander-transaction/prediction_lib'
+    use_ssh_args: yes
   tags:
     - santander_lib
 
 - name: Push kaggle credentials
-  become: yes
-  become_method: sudo
   synchronize:
     src: '~/.kaggle/'
-    dest: '~'
+    dest: '/home/ubuntu/.kaggle'
+    use_ssh_args: yes
   tags:
     - santander_lib

@@ -3,11 +3,11 @@
 - name: Build xgboost
   become: yes
   become_method: sudo
-  shell: |
-    cd ~/santander-transaction
+  shell:
+    cmd: "cd ~/santander-transaction
     git clone --recursive https://github.com/dmlc/xgboost
     cd xgboost
     mkdir build
     cd build
     cmake ..
-    make -j4
+    make -j4"

@@ -1,6 +1,5 @@
 ---
-- hosts: 192.168.1.13
-  connection: local
+- hosts: aws
   gather_facts: False
   tasks:
     - name: Install python
@@ -8,40 +7,52 @@
       become_method: sudo
       raw: 'sudo apt-get update && sudo apt-get -y install python3'
 
+    - name: Install python2
+      become: yes
+      become_method: sudo
+      raw: 'sudo apt-get update && sudo apt-get -y install python'
+
     - name: Install git and cmake
       become: yes
       become_method: sudo
-      raw: 'sudo apt-get update && sudo apt-get -y install git-core && sudo apt-get -y install cmake'
+      raw: 'sudo apt-get update && sudo apt-get -y install git-core && sudo apt-get -y install cmake && sudo apt-get -y install rsync'
+
+    - name: Clean santander directory
+      file:
+        state: absent
+        path: ~/santander-transaction
 
     - name: Create santander directory
-      shell:
-        cmd: 'rm -rf ~/santander-transaction && mkdir ~/santander-transaction'
+      file:
+        state: directory
+        path: ~/santander-transaction
 
 
-- hosts: 192.168.1.13
-  connection: local
+- hosts: aws
   gather_facts: False
   roles:
     - role: santander_lib
       message: copy code to remote machine
 
-- hosts: 192.168.1.13
+- hosts: aws
   gather_facts: False
   tasks:
-    - name: Install requirements.txt
+    - name: Install pip3
       become: yes
       become_method: sudo
-      raw: 'chmod +x ~/santander-transaction/prediction_lib/requirements.txt && pip3 install -r ~/santander-transaction/prediction_lib/requirements.txt'
+      raw: 'sudo apt-get update && sudo apt-get -y install python3-pip && pip3 install --upgrade pip'
 
-- hosts: 192.168.1.13
+    - name: Install requirements.txt
+      raw: 'chmod +x ~/santander-transaction/prediction_lib/requirements.txt && sudo pip3 install -r ~/santander-transaction/prediction_lib/requirements.txt'
+
+- hosts: aws
   gather_facts: False
   roles:
     - role: build_xgboost
       message: build xgboost with support for multithreading
 
-- hosts: 192.168.1.13
+- hosts: aws
   tasks:
     - name: Download file from kaggle
-      shell: |
-        cd ~/santander-transaction
-        kaggle competitions download -c santander-customer-transaction-prediction
+      shell:
+        cmd: "cd ~/santander-transaction && kaggle competitions download -c santander-customer-transaction-prediction"
